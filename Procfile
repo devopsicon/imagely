@@ -1,0 +1,1 @@
+web: java -jar build/libs/gs-uploading-files-0.1.0.jar
