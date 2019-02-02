@@ -28,12 +28,18 @@ import java.util.concurrent.ExecutionException;
 @RequestMapping("/api/image")
 @CrossOrigin()
 public class ImageUploadController {
-    AsyncHttpClient asyncHttpClient = asyncHttpClient();
+
+    @Autowired
+    AsyncHttpClient asyncHttpClient;
 
     Logger logger = LoggerFactory.getLogger(ImageUploadController.class);
 
     @Autowired
     PdfService pdfService;
+
+    public void setAsyncHttpClient(AsyncHttpClient asyncHttpClient) {
+        this.asyncHttpClient = asyncHttpClient;
+    }
 
     @PostMapping()
     public ResponseEntity<?> receiveImage(@RequestBody String bodyString) throws ExecutionException, InterruptedException, IOException, DocumentException {
@@ -50,7 +56,7 @@ public class ImageUploadController {
                 .setUsePreemptiveAuth(true)
                 .setScheme(Realm.AuthScheme.BASIC)
                 .build();
-        Request r= post(url)
+        Request r= asyncHttpClient.preparePost(url)
                 .setRealm(realm)
                 .addBodyPart(new StringPart("from", from))
                 .addBodyPart(new StringPart("to",to))
@@ -59,9 +65,9 @@ public class ImageUploadController {
                 .addBodyPart(new FilePart("inline",pdf))
                 .build();
 
-        Response r1 = asyncHttpClient.executeRequest(r).get();
+        ListenableFuture<Response> r1 = asyncHttpClient.executeRequest(r);
 
-        logger.info(r1.getStatusText());
+        logger.info(r1.get().getStatusText());
         pdf.delete();
         return new ResponseEntity<>("All Good", HttpStatus.OK);
     }

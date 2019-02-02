@@ -36,6 +36,7 @@ dependencies {
     compile group: 'org.apache.pdfbox', name: 'pdfbox-tools', version: '2.0.13'
     compile group: 'net.sf.cssbox', name: 'pdf2dom', version: '1.7'
     compile group: 'com.itextpdf', name: 'itextpdf', version: '5.5.13'
+    testCompile group: 'com.github.stefanbirkner', name: 'system-rules', version: '1.19.0'
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
     compile group: 'org.asynchttpclient', name: 'async-http-client', version: '2.7.0'
