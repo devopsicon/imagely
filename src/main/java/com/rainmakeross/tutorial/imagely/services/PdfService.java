@@ -16,6 +16,14 @@ import java.util.Base64;
 @Service
 public class PdfService {
 
+    /**
+     * Service for producing and returning a PDF file from Image string
+     *
+     * @param imgString is base64 string
+     * @return
+     * @throws IOException
+     * @throws DocumentException
+     */
     public File createPDFFromImageString(String imgString) throws IOException, DocumentException {
         String result = imgString.split(",")[1];
         Base64.Decoder decoder = Base64.getDecoder();

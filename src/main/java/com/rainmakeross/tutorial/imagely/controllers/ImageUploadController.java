@@ -14,14 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import static org.asynchttpclient.Dsl.*;
 
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.*;
-import java.nio.charset.Charset;
-import java.time.LocalDateTime;
-import java.util.Base64;
-import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
 @Controller
@@ -37,10 +30,15 @@ public class ImageUploadController {
     @Autowired
     PdfService pdfService;
 
-    public void setAsyncHttpClient(AsyncHttpClient asyncHttpClient) {
-        this.asyncHttpClient = asyncHttpClient;
-    }
-
+    /**
+     * End point to receive base64 Image String
+     * @param bodyString
+     * @return
+     * @throws ExecutionException
+     * @throws InterruptedException
+     * @throws IOException
+     * @throws DocumentException
+     */
     @PostMapping()
     public ResponseEntity<?> receiveImage(@RequestBody String bodyString) throws ExecutionException, InterruptedException, IOException, DocumentException {
         String pwd =  System.getenv("MAILGUN_PWD");
