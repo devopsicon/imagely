@@ -31,6 +31,32 @@ repositories {
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+sourceSets {
+    // Note that just declaring this sourceset creates two configurations.
+    funcTest {
+        java {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+        }
+    }
+}
+
+configurations {
+    funcTestCompile.extendsFrom testCompile
+    funcTestRuntime.extendsFrom testRuntime
+}
+
+
+String url = System.properties.getProperty("TEST_URL")
+task funcTest(type:Test){
+    systemProperties systemProperties
+    description = "Run performance tests (located in src/funcTest/...). ${url}"
+    println "Checking connection to ${url}"
+
+    testClassesDirs = sourceSets.funcTest.output.classesDirs
+    classpath = sourceSets.funcTest.runtimeClasspath
+}
+
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-web")
     compile group: 'org.apache.pdfbox', name: 'pdfbox-tools', version: '2.0.13'
@@ -40,4 +66,6 @@ dependencies {
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
     compile group: 'org.asynchttpclient', name: 'async-http-client', version: '2.7.0'
+
+    funcTestCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.3.0'
 }
